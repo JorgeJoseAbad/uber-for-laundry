@@ -1,20 +1,23 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo")(session);
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const index = require('./routes/index');
+const users = require('./routes/users');
 const authRoutes=require('./routes/auth');
 const laundryRoutes = require('./routes/laundry');
 
-mongoose.connect('mongodb://localhost/uberlaundry');
+mongoose.connect('mongodb://localhost/uberlaundry',{
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 var app = express();
 
 // view engine setup
@@ -23,7 +26,8 @@ app.set('view engine', 'ejs');
 app.set('layout', 'layouts/main-layout');
 app.use(expressLayouts);
 app.locals.title = 'Uber for Laundry';
-mongoose.Promise=global.Promise;
+
+//mongoose.Promise=global.Promise;
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -44,6 +48,7 @@ app.use(session({
   })
 }));
 
+//if user in session, he goes to locals
 app.use((req, res, next) => {
   if (req.session.currentUser) {
     res.locals.currentUserInfo = req.session.currentUser;
@@ -51,7 +56,6 @@ app.use((req, res, next) => {
   } else {
     res.locals.isUserLoggedIn = false;
   }
-
   next();
 });
 

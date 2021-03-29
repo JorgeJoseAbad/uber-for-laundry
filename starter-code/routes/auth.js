@@ -30,7 +30,7 @@ router.post('/signup', (req, res, next) => {
 
     if (existingUser !== null) {
       res.render('auth/signup', {
-        errorMessage: `The email ${emailInput} is already in use.`
+        errorMessage: `The email ${email} is already in use.`
       });
       return;
     }
@@ -53,7 +53,6 @@ router.post('/signup', (req, res, next) => {
         });
         return;
       }
-
       res.redirect('/');
     });
   });
@@ -79,7 +78,7 @@ router.post('/login', (req, res, next) => {
   User.findOne({ email: email }, (err, theUser) => {
     if (err || theUser === null) {
       res.render('auth/login', {
-        errorMessage: `There isn't an account with email ${emailInput}.`
+        errorMessage: `There isn't an account with email ${email}.`
       });
       return;
     }
