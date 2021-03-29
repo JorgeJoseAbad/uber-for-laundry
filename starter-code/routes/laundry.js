@@ -6,7 +6,7 @@ const LaundryPickup = require('../models/laundry-pickup');
 
 const router = express.Router();
 
-
+//middleware
 router.use((req, res, next) => {
   if (req.session.currentUser) {
     next();
@@ -110,5 +110,25 @@ router.post('/laundry-pickups', (req, res, next) => {
     res.redirect('/dashboard');
   });
 });
+
+router.post('/launderers/:id/delete',(req, res, next) => {
+
+  const laundererId = req.params.id;
+  const userID = req.session.currentUser._id;
+
+  if (req.body.nolaunder==="nolaunder"){
+      const myUser = {
+        isLaunderer: false,
+        fee: 0
+      }
+      User.findByIdAndUpdate(laundererId,myUser,(err, user) => {
+        if (err){
+          return next(err);
+        }
+        res.redirect('/launderers');
+      })
+  }   else res.redirect('/launderers');
+
+})
 
 module.exports = router;

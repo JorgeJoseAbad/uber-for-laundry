@@ -14,6 +14,8 @@
     Your laundering fee is
     <b>$<%= currentUserInfo.fee %>.</b>
   </p>
+
+
 <% } else { %>
   <h3> Want to become a launderer? </h3>
 
@@ -41,3 +43,15 @@
     </li>
   <% }) %>
 </ul>
+<hr>
+
+<% if (currentUserInfo.isLaunderer) { %>
+<h4>Do you want to stop being a Launderer?</h4>
+<form class="" action="/launderers/<%=currentUserInfo._id%>/delete" method="post">
+  <div class="">
+    <label for="nolaunder">Click if you are tired of wash</label>
+    <input type="checkbox" name="nolaunder" value="nolaunder" id="nolaunder">
+    <button>Liberate de fregaos</button>
+  </div>
+</form>
+<% } %>
