@@ -1,5 +1,5 @@
 <!-- views/laundry/dashboard.ejs -->
-<h2> Your laundry Dashboard </h2>
+<h2> <%=user%>: Your laundry Dashboard </h2>
 
 <ul>
   <li> <a href="/launderers"> Find a Launderer </a> </li>
@@ -8,7 +8,7 @@
 
 
 <% if (currentUserInfo.isLaunderer) { %>
-  <h3> <%=user%>, You are a launderer </h3>
+  <h3> Wellcome <%=user%>, You are a launderer </h3>
 
   <p>
     Your laundering fee is
@@ -17,7 +17,7 @@
 
 
 <% } else { %>
-  <h3> Want to become a launderer? </h3>
+  <h3> Wellcome <%=user%>, Want to become a launderer? </h3>
 
   <form action="/launderers" method="post">
     <div>
@@ -29,7 +29,7 @@
   </form>
 <% } %>
 
-<h3> Pending Pickups </h3>
+<h3> Pending Pickups for <%=user%></h3>
 
 <ul>
   <% pickups.forEach((onePickup) => { %>
@@ -40,7 +40,7 @@
         <li> <b>User</b>: <%= onePickup.user.name %> </li>
         <li> <b>Launderer</b>: <%= onePickup.launderer.name %> </li>
         <%if (onePickup.pickupDate.getTime() < actualDate.getTime()){%>
-          <li><b style="background-color:red"> Losing by date, bad launderer! </b></li>
+          <li><b style="background-color:#f88a8a"> Losing by date, bad launderer! </b></li>
         <%}%>
       </ul>
       <form class="" action="/laundry-pickups/delete" method="post">
