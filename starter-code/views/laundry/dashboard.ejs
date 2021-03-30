@@ -39,7 +39,13 @@
       <ul>
         <li> <b>User</b>: <%= onePickup.user.name %> </li>
         <li> <b>Launderer</b>: <%= onePickup.launderer.name %> </li>
+        <%if (onePickup.pickupDate.getTime() < actualDate.getTime()){%>
+          <li><b style="background-color:red"> Losing by date, bad launderer! </b></li>
+        <%}%>
       </ul>
+      <form class="" action="/laundry-pickups/delete" method="post">
+          <button type="submit" name="button" value="<%= onePickup._id %>">Delete</button>
+      </form>
     </li>
   <% }) %>
 </ul>

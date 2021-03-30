@@ -39,7 +39,8 @@ router.get('/dashboard', (req, res, next) => {
 
       res.render('laundry/dashboard', {
         pickups: pickupDocs,
-        user: req.session.currentUser.name
+        user: req.session.currentUser.name,
+        actualDate: new Date()
       });
     });
 });
@@ -117,6 +118,18 @@ router.get('/launderers/:id', (req, res, next) => {
   });
 });
 
+router.post('/laundry-pickups/delete',(req, res, next) => {
+
+  let pickupToDelete = req.body.button;
+
+  LaundryPickup.findByIdAndRemove(pickupToDelete,(err, theLaundryPickupRemoved) => {
+    if (err) return next(err);
+    console.log("Elemento eliminado", theLaundryPickupRemoved);
+    res.redirect('/dashboard');
+  })
+
+})
+
 router.post('/laundry-pickups', (req, res, next) => {
   const pickupInfo = {
     pickupDate: req.body.pickupDate,
@@ -135,7 +148,5 @@ router.post('/laundry-pickups', (req, res, next) => {
     res.redirect('/dashboard');
   });
 });
-
-
 
 module.exports = router;
