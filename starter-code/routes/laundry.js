@@ -38,7 +38,8 @@ router.get('/dashboard', (req, res, next) => {
       }
 
       res.render('laundry/dashboard', {
-        pickups: pickupDocs
+        pickups: pickupDocs,
+        user: req.session.currentUser.name
       });
     });
 });
@@ -61,6 +62,30 @@ router.post('/launderers', (req, res, next) => {
     res.redirect('/dashboard');
   });
 });
+
+router.post('/launderers/:id/delete',(req, res, next) => {
+
+  const laundererId = req.params.id;
+  const userID = req.session.currentUser._id;
+  debugger;
+
+  if (req.body.nolaunder === "nolaunder"){
+      const myModifiedUser = {
+        isLaunderer: false,
+        fee: 0
+      }
+      User.findByIdAndUpdate(laundererId,myModifiedUser,{new: true},(err, theModifiedUser) => {
+        if (err){
+          return next(err);
+        }
+        debugger;
+        console.log(theModifiedUser)
+        req.session.currentUser = theModifiedUser;
+        res.redirect('/dashboard');
+      })
+  }   else res.redirect('/launderers');
+
+})
 
 
 router.get('/launderers', (req, res, next) => {
@@ -111,24 +136,6 @@ router.post('/laundry-pickups', (req, res, next) => {
   });
 });
 
-router.post('/launderers/:id/delete',(req, res, next) => {
 
-  const laundererId = req.params.id;
-  const userID = req.session.currentUser._id;
-
-  if (req.body.nolaunder==="nolaunder"){
-      const myUser = {
-        isLaunderer: false,
-        fee: 0
-      }
-      User.findByIdAndUpdate(laundererId,myUser,(err, user) => {
-        if (err){
-          return next(err);
-        }
-        res.redirect('/launderers');
-      })
-  }   else res.redirect('/launderers');
-
-})
 
 module.exports = router;
